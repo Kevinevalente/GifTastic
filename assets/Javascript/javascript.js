@@ -17,6 +17,7 @@ var actors = ["Tom Hanks", "Brad Pitt", "Leonardo DiCaprio"];
 function showGifs() {
 	$("#actorTabs").empty();
 
+
 //loop through array of actors
 for (var i = 0; i < actors.length; i++) {
 
@@ -44,6 +45,7 @@ showGifs();
 //This is the on click function for actor button(s)
 function giphyAjaxCall() { 
 	$("button").on("click", function() {
+
 //setting variable actor equal to the value of "this" button
       var actor = $(this).attr("data-actor");
 //set variable URl up so that actor is interchangable
@@ -56,7 +58,11 @@ function giphyAjaxCall() {
         })
 //Promise that indicates AJAX call has been executed and then respond in JSON format
         .done(function(response) {
+//Reset Fucntion to clear old Gifs on Opening of new tab
 
+var reset = function() {
+showGifs();
+};
 //Results is an array of objects
  var results = response.data;
 
@@ -70,17 +76,28 @@ function giphyAjaxCall() {
             var personImage = $("<img>");
             personImage.attr("src", results[i].images.fixed_height.url);
 
+
+//Try Using Show Gif
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
 
             $("#actors").prepend(gifDiv);
           }
-
+          reset();
         });
      });
 };
+
 $(document).on('click', 'button', giphyAjaxCall);
 
+//Change animation state of GIF
+$("#actors").click(
+    function() {
+        $(this).attr("src", "animate1.gif");
+    },
+    function() {
+        $(this).attr("src", "static1.jpg");
+    }                         
+);  
 
 
-var queryURL = "http://api.giphy.com/v1/gifs/search?q=monkey&limit=5&api_key=dc6zaTOxFJmzC ";
